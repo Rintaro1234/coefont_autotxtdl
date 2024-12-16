@@ -1,19 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const userInput = document.getElementById("userInput");
+    const folderName = document.getElementById("downloadFolder");
     const saveButton = document.getElementById("saveButton");
-  
-    // 初期値をロード
-    chrome.storage.sync.get(["userText"], (result) => {
-      if (result.userText) {
-        userInput.value = result.userText;
-      }
+
+    saveButton.addEventListener("click", () =>{
+        const name = folderName.value;
+        chrome.storage.sync.set({downloadFolder: name}, () => {
+            window.close();
+        });
+    })
+
+    chrome.storage.sync.get(["downloadFolder"], (result) => {
+        if (result.downloadFolder) {
+            folderName.value = result.downloadFolder;
+        }
     });
-  
-    // 保存ボタンのクリックイベント
-    saveButton.addEventListener("click", () => {
-      const text = userInput.value;
-      chrome.storage.sync.set({ userText: text }, () => {
-        alert("Settings saved!");
-      });
-    });
-  });
+  }
+);
